@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCarRequest;
+use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
-use Illuminate\Http\Request;
 
 class CarController extends Controller
 {
@@ -26,7 +27,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        //
+        return view('cars.create');
     }
 
     /**
@@ -35,9 +36,17 @@ class CarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCarRequest $request)
     {
-        //
+        $form_data = $request->validated();
+
+        $newCar = new Car();
+
+        $newCar->fill($form_data);
+
+        $newCar->save();
+
+        return redirect()->route('cars.show', ['car' => $newCar->id]);
     }
 
     /**
@@ -48,9 +57,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-p
-        return view('cars.show', compact($car));
-
+        return view('cars.show', compact('car'));
     }
 
     /**
@@ -59,9 +66,9 @@ p
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Car $car)
     {
-        //
+        return view('cars.edit', compact('car'));
     }
 
     /**
@@ -71,9 +78,13 @@ p
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $form_data = $request->validated();
+
+        $car->update($form_data);
+
+        return redirect()->route('cars.show', ['car' => $car->id]);
     }
 
     /**
@@ -82,8 +93,10 @@ p
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Car $car)
     {
-        //
+        $car->delete();
+
+        return redirect()->route('cars.index');
     }
 }

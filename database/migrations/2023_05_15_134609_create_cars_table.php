@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
+
             $table->string('brand', 50);
             $table->string('model', 50);
-            $table->decimal('price', 8 , 2);
+            $table->decimal('price', 8, 2);
             $table->smallInteger('cc')->unsigned();
             $table->date('year_release');
+
             $table->timestamps();
         });
     }
