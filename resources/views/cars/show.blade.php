@@ -9,8 +9,15 @@
             <span class="pe-5">{{ $car->model }}</span>
             <span class="ps-5">{{ $car->year_release }}</span>
         </div>
+        
+        @foreach ($car->optionals as $optional)
+            <span class="badge rounded-pill text-bg-primary">{{$optional->name}}</span>
+        @endforeach
+
         <h3>Prezzo: {{ $car->price }} €</h3>
         <small>Cilindrata: {{ $car->cc }}</small>
+
+        
 
         <div class="d-flex justify-content-center py-5">
             <a href="{{ route('cars.index') }}" class="btn btn-secondary me-2">Torna alla lista</a>
@@ -24,5 +31,6 @@
                 </button>
             </form>
         </div>
+
     </div>
 @endsection

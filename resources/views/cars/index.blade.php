@@ -12,6 +12,7 @@
                 <th scope="col">Prezzo</th>
                 <th scope="col">Cilindrata</th>
                 <th scope="col">Data di uscita</th>
+                <th scope="col">Optionals</th>
                 <th scope="col" class="text-end">
                     <a href="{{ route('cars.create') }}" class="btn btn-success mt-4">
                         <i class="fa-solid fa-plus pe-2"></i>
@@ -29,6 +30,11 @@
                     <td>{{ $car->price }}</td>
                     <td>{{ $car->cc }}</td>
                     <td>{{ $car->year_release }}</td>
+                    <td> 
+                        @foreach ($car->optionals as $optional)
+                            <span class="badge rounded-pill text-bg-primary">{{$optional->name}}</span>
+                        @endforeach
+                    </td>
                     <td class="d-flex justify-content-end">
                         <a class="btn btn-primary" href="{{ route('cars.show', ['car' => $car->id]) }}">
                             <i class="fa-solid fa-circle-info"></i>

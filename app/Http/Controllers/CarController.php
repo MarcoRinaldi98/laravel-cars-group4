@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
+use App\Models\Optional;
+use League\Flysystem\Config;
+use PhpOption\Option;
 
 class CarController extends Controller
 {
@@ -27,7 +30,8 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view('cars.create');
+        $optionals = Optional::all();
+        return view('cars.create', compact('optionals'));
     }
 
     /**
@@ -42,10 +46,15 @@ class CarController extends Controller
 
         $newCar = new Car();
 
+
+
         $newCar->fill($form_data);
 
         $newCar->save();
 
+        if ($request->has('optionals')) {
+            $newCar->optionals()->attach($request->optionals);
+        }
         return redirect()->route('cars.show', ['car' => $newCar->id]);
     }
 
@@ -68,7 +77,8 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        return view('cars.edit', compact('car'));
+        $optionals = Optional::all();
+        return view('cars.edit', compact('car', 'optionals'));
     }
 
     /**
@@ -81,6 +91,8 @@ class CarController extends Controller
     public function update(UpdateCarRequest $request, Car $car)
     {
         $form_data = $request->validated();
+
+        $car->optionals()->sync($request->optionals);
 
         $car->update($form_data);
 

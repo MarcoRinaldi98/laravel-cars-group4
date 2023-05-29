@@ -37,6 +37,25 @@
                 value="{{ old('year_release', $car->year_release) }}">
         </div>
 
+        <div class="mb-3">
+            @foreach($optionals as $optional)
+
+                @if ($errors->any())
+                    <input id="optional_{{$optional->id}}" @if (in_array($optional->id , old('optionals', []))) checked @endif type="checkbox" name="optionals[]" value="{{$optional->id}}">
+                @else
+                    <input id="optional_{{$optional->id}}" @if ($car->optionals->contains($optional->id)) checked @endif type="checkbox" name="optionals[]" value="{{$optional->id}}">
+                @endif
+
+                <label for="optional_{{$optional->id}}" class="form-label">{{$optional->name}}</label>
+                <br>
+            @endforeach
+            @error('optionals')
+                <div class="invalid-feedback">
+                    {{$message}}
+                </div>
+            @enderror
+        </div>
+
         <button type="submit" class="btn btn-primary">Salva</button>
         <a href="{{ route('cars.index') }}" class="btn btn-secondary me-2">
             Torna alla lista
